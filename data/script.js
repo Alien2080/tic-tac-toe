@@ -1,3 +1,15 @@
+function Square() {
+    let value = ''
+
+    const setValue = (player) => {
+        value = player
+    }
+
+    const getValue = () => value
+
+    return { setValue, getValue }
+}
+
 function Board() {
     const height = 3
     const width = 3
@@ -24,18 +36,6 @@ function Board() {
     }
 
     return { getBoard, printBoard }
-}
-
-function Square() {
-    let value = ''
-
-    const setValue = (player) => {
-        value = player
-    }
-
-    const getValue = () => value
-
-    return { setValue, getValue }
 }
 
 const gameController = (() => {
@@ -156,3 +156,5 @@ const gameController = (() => {
 
     return { newRound, takeTurn }
 })()
+
+

@@ -4,7 +4,8 @@ body {
     align-items: center;
     height: 100vh;
     margin: 0;
-    background-color: #f4f4f4;
+    background-color: #b598cf;
+    font-family: 'Roboto', sans-serif; /* Updated font-family */
 }
 
 .board {
@@ -38,7 +39,7 @@ body {
     left: 50%;
     transform: translate(-50%, -50%);
     padding: 20px;
-    background-color: #2ecc71;
+    background-color: #b1551f;
     color: #fff;
     font-size: 18px;
     font-weight: bold;

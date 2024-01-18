@@ -58,27 +58,42 @@ const gameController = (() => {
     const getBoard = () => { return board.getBoard() }
 
     const checkForWinner = () => {
-        const rowWinner = checkRows()
-        const columnWinner = checkColumns()
-        const diagWinner = checkDiagonal()
-
-        let winner = ''
-        if (rowWinner != '') {
-            winner = rowWinner
+        const rowWinner = checkRows();
+        const columnWinner = checkColumns();
+        const diagWinner = checkDiagonal();
+    
+        let winner = '';
+        if (rowWinner !== '') {
+            winner = rowWinner;
+        } else if (columnWinner !== '') {
+            winner = columnWinner;
+        } else if (diagWinner !== '') {
+            winner = diagWinner;
         }
-        else if (columnWinner != '') {
-            winner = columnWinner
+    
+        const isBoardFull = isFullBoard();
+    
+        if (winner !== '') {
+            const msg = `Player ${winner} won!`;
+            alert(msg);
+            console.log(msg);
+            newRound();
+        } else if (isBoardFull) {
+            alert("It's a tie! The board is full.");
+            newRound();
         }
-        else if (diagWinner != '') {
-            winner = diagWinner
+    }
+    
+    const isFullBoard = () => {
+        const board = gameController.getBoard();
+        for (let i = 0; i < board.length; i++) {
+            for (let j = 0; j < board[i].length; j++) {
+                if (board[i][j].getValue() === '') {
+                    return false; // There is an empty square, so the board is not full
+                }
+            }
         }
-
-        if (winner != '') {
-            const msg = `Player ${winner} won!`
-            alert(msg)
-            console.log(msg)
-            newRound()
-        }
+        return true; // All squares are occupied, so the board is full
     }
 
     const checkRows = () => {
@@ -189,14 +204,17 @@ const TicTacToeUI = () => {
     }
 
     const handleSquareClick = (event) => {
-        const row = parseInt(event.target.dataset.row)
-        const col = parseInt(event.target.dataset.col)
-        gameController.takeTurn(currentPlayer, row, col)
-
-        // Toggle players
-        currentPlayer = currentPlayer === player1 ? player2 : player1
-
-        renderBoard()
+        const row = parseInt(event.target.dataset.row);
+        const col = parseInt(event.target.dataset.col);
+        const squareValue = gameController.getBoard()[row][col].getValue();
+    
+        if (squareValue === '') {
+            gameController.takeTurn(currentPlayer, row, col);
+            currentPlayer = currentPlayer === player1 ? player2 : player1;
+            renderBoard();
+        } else {
+            alert("This square is already taken. Please choose another square.");
+        }
     }
 
     return { renderBoard }

@@ -55,6 +55,8 @@ const gameController = (() => {
         checkForWinner()
     }
 
+    const getBoard = () => { return board.getBoard() }
+
     const checkForWinner = () => {
         const rowWinner = checkRows()
         const columnWinner = checkColumns()
@@ -80,45 +82,41 @@ const gameController = (() => {
     }
 
     const checkRows = () => {
-        for (i = 0; i < board.getBoard().length; i++) {
+        for (let i = 0; i < board.getBoard().length; i++) {
             let count = 0
             let value = board.getBoard()[i][0].getValue()
-            for (j = 0; j < board.getBoard()[i].length; j++) {
+            for (let j = 0; j < board.getBoard()[i].length; j++) {
                 if (board.getBoard()[i][j].getValue() === value && value != '') {
                     count++
-                }
-                else {
+                } else {
                     count = 0
+                    value = board.getBoard()[i][j].getValue()
                 }
             }
             if (count == board.getBoard()[i].length) {
                 return value
             }
-            else {
-                return ''
-            }
         }
+        return ''
     }
-
+    
     const checkColumns = () => {
-        for (j = 0; j < board.getBoard()[0].length; j++) {
+        for (let j = 0; j < board.getBoard()[0].length; j++) {
             let count = 0
             let value = board.getBoard()[0][j].getValue()
-            for (i = 0; i < board.getBoard().length; i++) {
+            for (let i = 0; i < board.getBoard().length; i++) {
                 if (board.getBoard()[i][j].getValue() === value && value != '') {
                     count++
-                }
-                else {
+                } else {
                     count = 0
+                    value = board.getBoard()[i][j].getValue()
                 }
             }
-            if (count == board.getBoard()[j].length) {
+            if (count == board.getBoard().length) {
                 return value
             }
-            else {
-                return ''
-            }
         }
+        return ''
     }
 
     const checkDiagonal = () => {
@@ -154,7 +152,53 @@ const gameController = (() => {
         }
     }
 
-    return { newRound, takeTurn }
+    return { newRound, takeTurn, getBoard }
 })()
 
+const TicTacToeUI = () => {
+    const boardContainer = document.getElementById("board")
+    const player1 = "player 1"
+    const player2 = "player 2"
+    let currentPlayer = player1
 
+    const createSquareElement = (row, col) => {
+        const square = document.createElement("div")
+        square.classList.add("square")
+        square.dataset.row = row
+        square.dataset.col = col
+        square.addEventListener("click", handleSquareClick)
+        return square
+    }
+
+    const renderBoard = () => {
+        const board = gameController.getBoard()
+        boardContainer.innerHTML = ""
+
+        for (let i = 0; i < board.length; i++) {
+            for (let j = 0; j < board[i].length; j++) {
+                const square = createSquareElement(i, j)
+                square.textContent = board[i][j].getValue()
+                boardContainer.appendChild(square)
+            }
+        }
+    }
+
+    const handleSquareClick = (event) => {
+        const row = parseInt(event.target.dataset.row)
+        const col = parseInt(event.target.dataset.col)
+        gameController.takeTurn(currentPlayer, row, col)
+
+        // Toggle players
+        currentPlayer = currentPlayer === player1 ? player2 : player1
+
+        renderBoard()
+    }
+
+    return { renderBoard }
+}
+
+const ticTacToeUI = TicTacToeUI()
+
+document.addEventListener("DOMContentLoaded", () => {
+    ticTacToeUI.renderBoard()
+})

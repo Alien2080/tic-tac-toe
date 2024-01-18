@@ -1,3 +1,5 @@
+const alertMessage = document.getElementById("alertMessage");
+
 function Square() {
     let value = ''
 
@@ -58,30 +60,40 @@ const gameController = (() => {
     const getBoard = () => { return board.getBoard() }
 
     const checkForWinner = () => {
-        const rowWinner = checkRows();
-        const columnWinner = checkColumns();
-        const diagWinner = checkDiagonal();
+        const rowWinner = checkRows()
+        const columnWinner = checkColumns()
+        const diagWinner = checkDiagonal()
     
-        let winner = '';
+        let winner = ''
         if (rowWinner !== '') {
-            winner = rowWinner;
+            winner = rowWinner
         } else if (columnWinner !== '') {
-            winner = columnWinner;
+            winner = columnWinner
         } else if (diagWinner !== '') {
-            winner = diagWinner;
+            winner = diagWinner
         }
     
-        const isBoardFull = isFullBoard();
+        const isBoardFull = isFullBoard()
     
         if (winner !== '') {
-            const msg = `Player ${winner} won!`;
-            alert(msg);
-            console.log(msg);
-            newRound();
+            showAlert(`Player ${winner} won!`)
+            newRound()
         } else if (isBoardFull) {
-            alert("It's a tie! The board is full.");
+            showAlert("It's a tie! The board is full.")
             newRound();
         }
+    }
+
+    const showAlert = (message) => {
+        alertMessage.textContent = message
+        alertMessage.style.display = "block"
+        setTimeout(() => {
+            hideAlert()
+        }, 2000) // Hide the alert after 2 seconds
+    }
+
+    const hideAlert = () => {
+        alertMessage.style.display = "none"
     }
     
     const isFullBoard = () => {
@@ -172,7 +184,7 @@ const gameController = (() => {
         return ''
     }
 
-    return { newRound, takeTurn, getBoard }
+    return { newRound, takeTurn, getBoard, showAlert }
 })()
 
 const TicTacToeUI = () => {
@@ -213,7 +225,7 @@ const TicTacToeUI = () => {
             currentPlayer = currentPlayer === player1 ? player2 : player1;
             renderBoard();
         } else {
-            alert("This square is already taken. Please choose another square.");
+            gameController.showAlert("This square is already taken. Please choose another square.");
         }
     }
 
@@ -221,6 +233,8 @@ const TicTacToeUI = () => {
 }
 
 const ticTacToeUI = TicTacToeUI()
+
+
 
 document.addEventListener("DOMContentLoaded", () => {
     ticTacToeUI.renderBoard()

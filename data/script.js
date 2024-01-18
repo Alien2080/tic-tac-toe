@@ -121,35 +121,40 @@ const gameController = (() => {
 
     const checkDiagonal = () => {
         if (board.getBoard().length != board.getBoard()[0].length) { return '' }
-
-        // Check \     
+    
+        // Check \
         let count = 0
         let value = board.getBoard()[0][0].getValue()
-        for (i = 1; i < board.getBoard().length; i++) {
-            if (board.getBoard()[i][i].getValue() === value && value != '') {
-                    count++
-                }
-            } 
-
-        if (count == board.getBoard().length -1) {
+        for (let i = 1; i < board.getBoard().length; i++) {
+            if (board.getBoard()[i][i].getValue() === value && value !== '') {
+                count++
+            } else {
+                count = 0
+                value = board.getBoard()[i][i].getValue()
+            }
+        }
+    
+        if (count === board.getBoard().length - 1) {
             return value
         }
-
-        // Check /    
+    
+        // Check /
         count = 0
-        value = board.getBoard()[board.getBoard().length -1][board.getBoard().length -1].getValue()
-        for (i = board.getBoard().length -2; i >= 0; i--) {
-            if (board.getBoard()[i][i].getValue() === value && value != '') {
-                    count++
-                }
-            } 
-
-        if (count == board.getBoard().length -1) {
+        value = board.getBoard()[0][board.getBoard().length - 1].getValue()
+        for (let i = 1; i < board.getBoard().length; i++) {
+            if (board.getBoard()[i][board.getBoard().length - 1 - i].getValue() === value && value !== '') {
+                count++
+            } else {
+                count = 0
+                value = board.getBoard()[i][board.getBoard().length - 1 - i].getValue()
+            }
+        }
+    
+        if (count === board.getBoard().length - 1) {
             return value
         }
-        else {
-            return ''
-        }
+    
+        return ''
     }
 
     return { newRound, takeTurn, getBoard }
@@ -157,8 +162,8 @@ const gameController = (() => {
 
 const TicTacToeUI = () => {
     const boardContainer = document.getElementById("board")
-    const player1 = "player 1"
-    const player2 = "player 2"
+    const player1 = "X"
+    const player2 = "O"
     let currentPlayer = player1
 
     const createSquareElement = (row, col) => {

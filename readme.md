@@ -2,4 +2,4 @@
 Simple game to learn JavaScript as part of the Odin Project.
 
 ## how to play
-run from console (for now). Hit F12 and use the gameController.takeTurns() function
+click square to play. 3 in a row wins.
